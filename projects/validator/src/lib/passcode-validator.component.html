@@ -1,0 +1,36 @@
+<form [formGroup]="validatorFromGroup">
+  <mat-form-field class="w-100" [appearance]="matFormFieldAppearance">
+    <mat-label>{{ matLabel }}</mat-label>
+    <input
+      matInput
+      formControlName="password"
+      [type]="_passwordRevealed ? 'text' : 'password'"
+    />
+    <button
+      matSuffix
+      mat-icon-button
+      (click)="_passwordRevealed = !_passwordRevealed"
+      style="bottom: 8px"
+    >
+      <ng-template [ngIf]="_passwordRevealed" [ngIfElse]="other"
+        ><mat-icon>visibility</mat-icon></ng-template
+      >
+      <ng-template #other><mat-icon>visibility_off</mat-icon></ng-template>
+    </button>
+    <mat-error
+      *ngIf="
+        validatorFromGroup.controls.password.errors?.weakPassword;
+        else otherError
+      "
+      >{{ matErrorWeak }}</mat-error
+    >
+    <ng-template #otherError>
+      <mat-error>{{ matErrorInvalid }}</mat-error>
+    </ng-template>
+  </mat-form-field>
+
+  <password-strength-meter-lib
+    [password]="validatorFromGroup.controls.password.value"
+  >
+  </password-strength-meter-lib>
+</form>
